@@ -1,0 +1,79 @@
+{
+  "orderPreparation": {
+    "parameters": {
+      "Path_271": {
+        "type": "String",
+        "default": "\"C:\\\\Users\\\\GautamVadera\\\\OneDrive - Zehntech Technologies Private Limited\\\\Downloads\\\\JS7_2.5.10_2.6.7_2.7.1\\\\2.7.1\""
+      }
+    },
+    "allowUndeclared": false
+  },
+  "instructions": [
+    {
+      "TYPE": "Execute.Named",
+      "jobName": "StopServices",
+      "label": "StopServices"
+    },
+    {
+      "TYPE": "Execute.Named",
+      "jobName": "Update_2.7.1",
+      "label": "Update_2.7.1"
+    },
+    {
+      "TYPE": "Execute.Named",
+      "jobName": "StartServices",
+      "label": "StartServices"
+    }
+  ],
+  "timeZone": "Asia/Calcutta",
+  "jobs": {
+    "StopServices": {
+      "agentName": "cluster",
+      "subagentClusterId": "round-robin",
+      "withSubagentClusterIdExpr": false,
+      "executable": {
+        "TYPE": "ShellScriptExecutable",
+        "script": "@@findstr/v \"^@@f.*&\" \"%~f0\"|pwsh.exe -&goto:eof\n\nWrite-Output \"*********** Stop services of JS7/Controller/Agent **********\"\n\nWrite-Output \"*******Stop Primary & Secondary joc******\"\nStop-Service -Name \"js7_joc_4527\" -Force\n\nWrite-Output \"*******Stop Primary &  Secondary Controller ******\"\nStop-Service -Name \"js7_controller_controller_4427\" -Force\n\nWrite-Output \"*******Agent ******\"\nStop-Service -Name \"js7_agent_4627\" -Force\n",
+        "v1Compatible": false
+      },
+      "skipIfNoAdmissionForOrderDay": false,
+      "parallelism": 1,
+      "graceTimeout": 1,
+      "failOnErrWritten": false,
+      "warnOnErrWritten": false
+    },
+    "Update_2.7.1": {
+      "agentName": "cluster",
+      "subagentClusterId": "round-robin",
+      "withSubagentClusterIdExpr": false,
+      "executable": {
+        "TYPE": "ShellScriptExecutable",
+        "script": "@@findstr/v \"^@@f.*&\" \"%~f0\"|pwsh.exe -&goto:eof\n\nWrite-Output \"********************* Update 2.7.1 *****************************\"\nWrite-Output \"********************* Update 2.7.1 *****************************\"\nWrite-Output \"********************* Update 2.7.1 *****************************\"\n\ncd \"$env:Path_271\\joc.2.7.1-SNAPSHOT\"\n\n.\\setup.cmd \"C:\\Program Files\\sos-berlin.com\\js7_271_oracle_rp\\joc_4527\\joc_install.xml\" \n\ncd ..\\controller.2.7.1-SNAPSHOT \n\n.\\setup.cmd \"C:\\Program Files\\sos-berlin.com\\js7_271_oracle_rp\\controller_4427\\controller_install.xml\" \n\ncd ..\\agent.2.7.1-SNAPSHOT \n\n.\\setup.cmd \"C:\\Program Files\\sos-berlin.com\\js7_271_oracle_rp\\agent_4627\\agent_install.xml\"",
+        "env": {
+          "Path_271": "$Path_271"
+        },
+        "v1Compatible": false
+      },
+      "skipIfNoAdmissionForOrderDay": false,
+      "parallelism": 1,
+      "graceTimeout": 1,
+      "failOnErrWritten": false,
+      "warnOnErrWritten": false
+    },
+    "StartServices": {
+      "agentName": "cluster",
+      "subagentClusterId": "round-robin",
+      "withSubagentClusterIdExpr": false,
+      "executable": {
+        "TYPE": "ShellScriptExecutable",
+        "script": "@@findstr/v \"^@@f.*&\" \"%~f0\"|pwsh.exe -&goto:eof\n\nWrite-Output \"*********** Start services of JS7/Controller/Agent **********\"\n\nWrite-Output \"*******start Primary & Secondary joc******\"\nstart-Service -Name \"js7_joc_4527\"\n\nWrite-Output \"*******start Primary &  Secondary Controller ******\"\nstart-Service -Name \"js7_controller_controller_4427\"\n\nWrite-Output \"*******Agent ******\"\nstart-Service -Name \"js7_agent_4627\"",
+        "v1Compatible": false
+      },
+      "skipIfNoAdmissionForOrderDay": false,
+      "parallelism": 1,
+      "graceTimeout": 1,
+      "failOnErrWritten": false,
+      "warnOnErrWritten": false
+    }
+  }
+}
